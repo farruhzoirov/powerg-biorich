@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useLang } from "@/context/LangContext";
 
 export default function Footer() {
@@ -18,12 +19,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 font-serif text-xl font-bold text-white mb-3">
-              <span className="w-9 h-9 bg-green-600 rounded-xl flex items-center justify-center text-lg">
-                🌿
-              </span>
-              PowerG Biorich
-            </div>
+            <Image
+              src="/images/logo.png"
+              alt="PowerG Biorich"
+              width={160}
+              height={80}
+              className="h-12 w-auto mb-3 brightness-0 invert"
+            />
             <p className="text-sm leading-relaxed max-w-xs">{t.footer.tagline}</p>
           </div>
 

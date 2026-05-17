@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLang } from "@/context/LangContext";
 import { Locale } from "@/data/translations";
 
@@ -36,16 +37,17 @@ export default function Header() {
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-6">
           {/* Logo */}
-          <Link
-            href="/#home"
-            className={`flex items-center gap-2 font-serif text-xl font-bold transition-colors duration-300 ${
-              scrolled ? "text-green-900" : "text-white"
-            }`}
-          >
-            <span className="w-9 h-9 bg-green-600 rounded-xl flex items-center justify-center text-lg shrink-0">
-              🌿
-            </span>
-            PowerG Biorich
+          <Link href="/#home" className="shrink-0">
+            <Image
+              src="/images/logo.png"
+              alt="PowerG Biorich"
+              width={140}
+              height={70}
+              priority
+              className={`h-10 w-auto transition-all duration-300 ${
+                scrolled ? "brightness-0" : "brightness-0 invert"
+              }`}
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -125,6 +127,13 @@ export default function Header() {
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
+        <Image
+          src="/images/logo.png"
+          alt="PowerG Biorich"
+          width={160}
+          height={80}
+          className="h-12 w-auto mb-2 brightness-0"
+        />
         {navLinks.map((link) => (
           <a
             key={link.href}

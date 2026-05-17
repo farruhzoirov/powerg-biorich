@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   description:
     "PowerG Biorich — Malayziyadan olib kelingan sifatli tabiiy mahsulotlar. Sog'liq va farovonlik uchun eng yaxshi tanlov.",
   keywords: ["PowerG Biorich", "tabiiy mahsulotlar", "Malayziya", "sog'liq"],
+  icons: {
+    icon: "/images/favicon.png",
+    apple: "/images/favicon.png",
+  },
   openGraph: {
     title: "PowerG Biorich",
     description: "Malayziyadan tabiiy mahsulotlar",
