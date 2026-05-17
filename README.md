@@ -1,57 +1,49 @@
 # PowerG Biorich — Landing Page
 
-Malayziyadan olib kelingan tabiiy mahsulotlar uchun statik landing page.  
-3 tilda: **O'zbek / Русский / English**
+Malayziyadan olib kelingan tabiiy mahsulotlar uchun Next.js landing page.
+**3 til: O'zbek / Русский / English**
 
 ---
 
-## Fayl tuzilmasi
+## Texnologiyalar
 
+- **Next.js 16** (App Router, TypeScript)
+- **Tailwind CSS v4**
+- **next/font** — Playfair Display + Inter (Google Fonts, optimized)
+
+---
+
+## Loyihani ishga tushirish
+
+```bash
+npm install
+npm run dev
 ```
-powerg-biorich/
-├── index.html          ← Asosiy sahifa
-├── product.html        ← Mahsulot tafsilot sahifasi (URL: ?id=1)
-├── css/
-│   └── styles.css      ← Barcha stillar
-├── js/
-│   ├── translations.js ← Barcha matnlar 3 tilda
-│   ├── data.js         ← Mahsulot ma'lumotlari
-│   ├── main.js         ← Asosiy mantiq
-│   └── product-detail.js ← Mahsulot sahifasi logikasi
-└── images/
-    ├── hero.jpg        ← Bosh sahifa rasmi (1920×900 px)
-    └── products/
-        ├── product-1.jpg   (tavsiya: 600×480 px)
-        ├── product-2.jpg
-        └── ...
-```
+
+Brauzerda `http://localhost:3000` ni oching.
 
 ---
 
 ## Rasmlarni qo'shish
 
-| Fayl | Tavsiya o'lchami | Izoh |
-|------|-----------------|------|
-| `images/hero.jpg` | **1920 × 900 px** | Landscape, to'q rang fonida yaxshi ko'rinadi |
-| `images/products/product-1.jpg` … `product-9.jpg` | **600 × 480 px** | 4:3 nisbat, kvadrat ham bo'ladi |
+| Fayl | O'lcham | Izoh |
+|------|---------|------|
+| `public/images/hero.jpg` | **1920 × 900 px** | Bosh sahifa rasmi. Landscape, to'q rang fonida yaxshi ko'rinadi |
+| `public/images/products/product-1.jpg` … `product-9.jpg` | **600 × 480 px** | 4:3 nisbat |
 
 ---
 
 ## Mahsulot ma'lumotlarini tahrirlash
 
-`js/data.js` faylini oching va har bir mahsulot uchun quyidagilarni to'ldiring:
+`data/products.ts` faylini oching va har bir mahsulot uchun:
 
-```js
+```ts
 {
   id: 1,
-  image: "images/products/product-1.jpg",
-  name: {
-    uz: "Mahsulot nomi",
-    ru: "Название продукта",
-    en: "Product Name",
-  },
-  shortDesc: { uz: "...", ru: "...", en: "..." },
-  fullDesc:  { uz: "...", ru: "...", en: "..." },
+  image: "/images/products/product-1.jpg",
+  name:        { uz: "...", ru: "...", en: "..." },
+  shortDesc:   { uz: "...", ru: "...", en: "..." },
+  fullDesc:    { uz: "...", ru: "...", en: "..." },
   ingredients: { uz: "...", ru: "...", en: "..." },
   benefits: {
     uz: ["Foyda 1", "Foyda 2"],
@@ -65,17 +57,54 @@ powerg-biorich/
 
 ## Aloqa ma'lumotlarini o'zgartirish
 
-`index.html` faylida quyidagi qatorlarni toping va o'zgartiring:
+`components/ContactSection.tsx` faylida telefon va emailni toping:
 
-```html
-<div class="info-value">+998 XX XXX XX XX</div>     ← telefon
-<div class="info-value">info@powerg-biorich.uz</div> ← email
+```tsx
+{ icon: "📞", label: t.contact.infoPhone, value: "+998 XX XXX XX XX" },
+{ icon: "✉️", label: t.contact.infoEmail, value: "info@powerg-biorich.uz" },
 ```
 
 ---
 
-## Deploy (GitHub Pages)
+## Deploy
 
-1. Repoga push qiling
-2. GitHub → Settings → Pages → Source: `main` branch, `/ (root)`
-3. Sayt tayyor: `https://farruhzoirov.github.io/powerg-biorich/`
+### Vercel (tavsiya etiladi)
+```bash
+npx vercel
+```
+
+### GitHub Pages (static export)
+`next.config.ts` ga `output: "export"` qo'shing, keyin `npm run build`.
+
+---
+
+## Fayl tuzilmasi
+
+```
+powerg-biorich/
+├── app/
+│   ├── globals.css          ← Tailwind + maxsus stillar
+│   ├── layout.tsx           ← Root layout (fonts, metadata)
+│   ├── page.tsx             ← Bosh sahifa
+│   └── products/[id]/
+│       └── page.tsx         ← Mahsulot sahifasi (SSG)
+├── components/
+│   ├── Header.tsx           ← Navigatsiya + til almashtiruvchi
+│   ├── Hero.tsx             ← Bosh banner
+│   ├── ProductsSection.tsx  ← 3x3 mahsulotlar gridi
+│   ├── ProductDetail.tsx    ← Mahsulot tafsiloti
+│   ├── AboutSection.tsx     ← Biz haqimizda
+│   ├── ContactSection.tsx   ← Aloqa formasi
+│   └── Footer.tsx
+├── context/
+│   └── LangContext.tsx      ← Til holati (localStorage)
+├── data/
+│   ├── products.ts          ← Mahsulot malumotlari (SHU YERGA KIRITING)
+│   └── translations.ts      ← Barcha matnlar 3 tilda
+├── hooks/
+│   └── useScrollReveal.ts
+└── public/
+    └── images/
+        ├── hero.jpg         ← O'zingizning rasmingizni qo'ying
+        └── products/        ← product-1.jpg ... product-9.jpg
+```
