@@ -31,8 +31,8 @@ export default function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-white/95 backdrop-blur-xl shadow-sm py-3"
-            : "py-5"
+            ? "bg-white/95 backdrop-blur-xl shadow-sm py-2"
+            : "py-4"
         }`}
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-6">
@@ -41,10 +41,10 @@ export default function Header() {
             <Image
               src="/images/logo.png"
               alt="PowerG Biorich"
-              width={140}
-              height={70}
+              width={220}
+              height={110}
               priority
-              className={`h-10 w-auto transition-all duration-300 ${
+              className={`h-16 w-auto transition-all duration-300 ${
                 scrolled ? "brightness-0" : "brightness-0 invert"
               }`}
             />
@@ -130,9 +130,9 @@ export default function Header() {
         <Image
           src="/images/logo.png"
           alt="PowerG Biorich"
-          width={160}
-          height={80}
-          className="h-12 w-auto mb-2 brightness-0"
+          width={260}
+          height={130}
+          className="h-24 w-auto mb-4 brightness-0"
         />
         {navLinks.map((link) => (
           <a
