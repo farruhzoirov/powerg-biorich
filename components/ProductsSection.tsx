@@ -37,13 +37,15 @@ export default function ProductsSection() {
             >
               {/* Image */}
               <div className="relative w-full aspect-[4/3] bg-green-100 overflow-hidden">
-                <Image
-                  src={product.image}
-                  alt={product.name[locale]}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+                {product.images[0] && (
+                  <Image
+                    src={product.images[0]}
+                    alt={product.name[locale]}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                )}
                 {/* Overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-t from-green-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
                   <span className="bg-white text-green-800 text-sm font-bold px-5 py-2 rounded-full">
