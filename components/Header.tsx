@@ -68,12 +68,6 @@ function ThemeToggleButton({
   );
 }
 
-const menuLabels: Record<Locale, { language: string; theme: string }> = {
-  uz: { language: "Til", theme: "Mavzu" },
-  ru: { language: "Язык", theme: "Тема" },
-  en: { language: "Language", theme: "Theme" },
-};
-
 export default function Header() {
   const { t, locale, setLocale } = useLang();
   const { theme, toggleTheme } = useTheme();
@@ -106,7 +100,6 @@ export default function Header() {
   ];
 
   const langs: Locale[] = ["uz", "ru", "en"];
-  const labels = menuLabels[locale];
 
   const langButtonClass = (active: boolean) =>
     `text-xs font-bold px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer ${
@@ -127,24 +120,30 @@ export default function Header() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          menuSolid
-            ? "bg-white/95 dark:bg-green-950/90 backdrop-blur-xl shadow-sm py-3 border-b border-gray-100 dark:border-green-900/80"
-            : "py-4"
+          menuOpen
+            ? "bg-transparent py-3"
+            : menuSolid
+              ? "bg-white/95 dark:bg-green-950/90 backdrop-blur-xl shadow-sm py-3 border-b border-gray-100 dark:border-green-900/80"
+              : "py-4"
         }`}
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-6">
-          <Link href="/#home" className="shrink-0" onClick={() => setMenuOpen(false)}>
-            <Image
-              src="/images/logo.png"
-              alt="PowerG Biorich"
-              width={280}
-              height={140}
-              priority
-              className={`h-16 md:h-[4.5rem] w-auto transition-all duration-300 ${
-                menuSolid ? "brightness-0 dark:invert" : "brightness-0 invert"
-              }`}
-            />
-          </Link>
+          <div className="shrink-0">
+            {!menuOpen && (
+              <Link href="/#home" onClick={() => setMenuOpen(false)}>
+                <Image
+                  src="/images/logo.png"
+                  alt="PowerG Biorich"
+                  width={280}
+                  height={140}
+                  priority
+                  className={`h-16 md:h-[4.5rem] w-auto transition-all duration-300 ${
+                    menuSolid ? "brightness-0 dark:invert" : "brightness-0 invert"
+                  }`}
+                />
+              </Link>
+            )}
+          </div>
 
           <nav className="header-nav items-center gap-8 flex-1 justify-center">
             {navLinks.map((link) => (
@@ -164,6 +163,32 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            {menuOpen && (
+              <div className="lg:hidden flex items-center gap-2">
+                <div className="flex items-center gap-1 rounded-full p-1 bg-white/10">
+                  {langs.map((l) => (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => setLocale(l)}
+                      className={`min-w-[2.5rem] text-xs font-bold px-2.5 py-1.5 rounded-full transition-all cursor-pointer ${
+                        locale === l
+                          ? "bg-amber-400 text-green-950"
+                          : "text-white/70 hover:text-white"
+                      }`}
+                    >
+                      {l.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+                <ThemeToggleButton
+                  theme={theme}
+                  onClick={toggleTheme}
+                  className="h-10 w-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer bg-white/10 text-amber-300 hover:bg-white/15"
+                />
+              </div>
+            )}
+
             <div
               className={`header-lang items-center gap-0.5 rounded-full p-1 ${
                 menuSolid ? "bg-gray-100 dark:bg-white/10" : "bg-white/15"
@@ -181,11 +206,14 @@ export default function Header() {
               ))}
             </div>
 
-            <ThemeToggleButton
-              theme={theme}
-              onClick={toggleTheme}
-              className={themeButtonClass}
-            />
+            {/* Mobile menu ochiq bo'lsa headerda faqat X ko'rinsin */}
+            {!menuOpen && (
+              <ThemeToggleButton
+                theme={theme}
+                onClick={toggleTheme}
+                className={themeButtonClass}
+              />
+            )}
 
             <div className="header-burger">
               <button
@@ -197,12 +225,12 @@ export default function Header() {
               >
                 <span
                   className={`absolute block h-0.5 w-5 rounded transition-all duration-300 ${
-                    menuSolid ? "bg-gray-800 dark:bg-gray-100" : "bg-white"
+                    menuOpen ? "bg-white" : menuSolid ? "bg-gray-800 dark:bg-gray-100" : "bg-white"
                   } ${menuOpen ? "rotate-45" : "-translate-y-[5px]"}`}
                 />
                 <span
                   className={`absolute block h-0.5 w-5 rounded transition-all duration-300 ${
-                    menuSolid ? "bg-gray-800 dark:bg-gray-100" : "bg-white"
+                    menuOpen ? "bg-white" : menuSolid ? "bg-gray-800 dark:bg-gray-100" : "bg-white"
                   } ${menuOpen ? "-rotate-45" : "translate-y-[5px]"}`}
                 />
               </button>
@@ -211,44 +239,38 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile menu — yopish faqat header burger orqali */}
+      {/* Mobile menu — full screen, page ko'rinmaydi */}
       <div
         className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
           menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden={!menuOpen}
       >
-        <button
-          type="button"
-          className="absolute inset-0 bg-green-950/40 dark:bg-black/60 backdrop-blur-sm"
-          onClick={() => setMenuOpen(false)}
-          aria-label="Close menu"
-          tabIndex={menuOpen ? 0 : -1}
-        />
+        <div className="absolute inset-0 bg-green-950 dark:bg-[#030d0a]" />
 
         <div
-          className={`absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-white dark:bg-green-950 shadow-2xl transition-transform duration-300 ease-out ${
-            menuOpen ? "translate-x-0" : "translate-x-full"
+          className={`relative h-full w-full pt-20 pb-8 px-6 flex flex-col transition-transform duration-300 ease-out ${
+            menuOpen ? "translate-y-0" : "-translate-y-2"
           }`}
         >
-          <div className="flex items-center justify-center border-b border-gray-100 dark:border-white/10 px-6 pt-24 pb-6">
+          <div className="flex justify-center pb-4">
             <Image
               src="/images/logo.png"
               alt="PowerG Biorich"
-              width={200}
-              height={100}
-              className="h-14 w-auto brightness-0 dark:invert"
+              width={270}
+              height={135}
+              className="h-20 w-auto brightness-0 invert"
             />
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-6 py-4">
-            <ul className="flex flex-col">
+          <nav className="flex-1 flex items-start pt-3">
+            <ul className="w-full flex flex-col gap-4 text-center">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="flex items-center py-4 text-lg font-semibold text-gray-800 dark:text-gray-100 border-b border-gray-100 dark:border-white/10 last:border-0 hover:text-green-700 dark:hover:text-amber-300 transition-colors"
+                    className="font-serif text-3xl font-bold text-white/95 hover:text-amber-300 transition-colors"
                   >
                     {link.label}
                   </a>
@@ -256,41 +278,6 @@ export default function Header() {
               ))}
             </ul>
           </nav>
-
-          <div className="border-t border-gray-100 dark:border-white/10 px-6 py-6 space-y-5">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-3">
-                {labels.language}
-              </p>
-              <div className="flex items-center gap-1 rounded-full p-1 bg-gray-100 dark:bg-white/10 w-fit">
-                {langs.map((l) => (
-                  <button
-                    key={l}
-                    type="button"
-                    onClick={() => setLocale(l)}
-                    className={`min-w-[3rem] text-sm font-bold px-4 py-2 rounded-full transition-all cursor-pointer ${
-                      locale === l
-                        ? "bg-green-700 text-white dark:bg-amber-400 dark:text-green-950 shadow-sm"
-                        : "text-gray-500 dark:text-gray-400 hover:text-green-700 dark:hover:text-white"
-                    }`}
-                  >
-                    {l.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between gap-4">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">
-                {labels.theme}
-              </p>
-              <ThemeToggleButton
-                theme={theme}
-                onClick={toggleTheme}
-                className="h-11 w-11 rounded-full flex items-center justify-center transition-all cursor-pointer bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-amber-300 hover:bg-gray-200 dark:hover:bg-white/15 shrink-0"
-              />
-            </div>
-          </div>
         </div>
       </div>
     </>

@@ -22,9 +22,9 @@ export default function Footer() {
             <Image
               src="/images/logo.png"
               alt="PowerG Biorich"
-              width={190}
-              height={95}
-              className="h-14 w-auto mb-3 brightness-0 invert"
+              width={280}
+              height={140}
+              className="h-16 md:h-[4.5rem] w-auto mb-3 brightness-0 invert"
             />
             <p className="text-sm leading-relaxed max-w-xs text-white/70 dark:text-gray-300">{t.footer.tagline}</p>
           </div>

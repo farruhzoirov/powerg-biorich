@@ -11,7 +11,7 @@ export default function ProductsSection() {
   const ref = useScrollReveal();
 
   return (
-    <section id="products" className="py-24 bg-green-50 dark:bg-[#071b14]">
+    <section id="products" className="py-24 bg-white dark:bg-[#071b14]">
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <div ref={ref} className="reveal text-center mb-16">
@@ -32,23 +32,25 @@ export default function ProductsSection() {
             <Link
               key={product.id}
               href={`/products/${product.id}`}
-              className="group bg-white dark:bg-[#0f2a20] rounded-3xl overflow-hidden shadow-sm border border-black/4 dark:border-white/10 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300"
+              className="group bg-white dark:bg-[#0f2a20] rounded-3xl overflow-hidden shadow-sm border border-black/4 dark:border-white/10 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               style={{ animationDelay: `${i * 60}ms` }}
             >
               {/* Image */}
-              <div className="relative w-full aspect-[4/3] bg-white overflow-hidden">
+              <div className="relative w-full aspect-[4/3] bg-white overflow-hidden border-b border-gray-100 dark:border-white/10">
                 {product.images[0] && (
-                  <Image
-                    src={product.images[0]}
-                    alt={product.name[locale]}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-contain group-hover:scale-105 transition-transform duration-500"
-                  />
+                  <div className="absolute inset-0 p-6 sm:p-7">
+                    <Image
+                      src={product.images[0]}
+                      alt={product.name[locale]}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-contain object-center group-hover:scale-[1.02] transition-transform duration-300"
+                    />
+                  </div>
                 )}
                 {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-green-800/55 dark:from-black/55 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                  <span className="bg-white dark:bg-[#163a2c] text-green-800 dark:text-amber-300 text-sm font-bold px-5 py-2 rounded-full">
+                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/45 transition-colors duration-300 flex items-end justify-center pb-6">
+                  <span className="opacity-0 group-hover:opacity-100 bg-white dark:bg-[#163a2c] text-green-800 dark:text-amber-300 text-sm font-bold px-5 py-2 rounded-full transition-opacity duration-300 shadow-sm">
                     {t.products.viewDetails}
                   </span>
                 </div>
