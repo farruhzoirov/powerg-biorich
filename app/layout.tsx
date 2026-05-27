@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "@/context/LangContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -37,9 +38,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="uz" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="uz" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("powerg-theme");if(t==="dark"){document.documentElement.classList.add("dark")}else if(t==="light"){document.documentElement.classList.remove("dark")}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
-        <LangProvider>{children}</LangProvider>
+        <ThemeProvider>
+          <LangProvider>{children}</LangProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

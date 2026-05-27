@@ -50,32 +50,32 @@ export default function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="py-24 bg-green-50">
+    <section id="contact" className="py-24 bg-green-50 dark:bg-[#071b14]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
           {/* Info side */}
           <div ref={refInfo} className="reveal pt-2">
-            <span className="inline-block bg-green-100 text-green-700 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+            <span className="inline-block bg-green-100 dark:bg-white/10 text-green-700 dark:text-amber-300 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
               {t.contact.badge}
             </span>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-green-950 mb-3">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-green-950 dark:text-white mb-3">
               {t.contact.title}
             </h2>
-            <p className="text-gray-500 text-lg leading-relaxed mb-10">
+            <p className="text-gray-500 dark:text-gray-300 text-lg leading-relaxed mb-10">
               {t.contact.subtitle}
             </p>
 
             <div className="flex flex-col gap-5">
               {infoItems.map((item, i) => (
                 <div key={i} className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-xl shrink-0">
+                  <div className="w-12 h-12 bg-green-100 dark:bg-white/10 rounded-xl flex items-center justify-center text-xl shrink-0">
                     {item.icon}
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-green-600 mb-0.5">
+                    <p className="text-xs font-bold uppercase tracking-widest text-green-600 dark:text-amber-300 mb-0.5">
                       {item.label}
                     </p>
-                    <p className="text-gray-700 font-medium">{item.value}</p>
+                    <p className="text-gray-700 dark:text-gray-200 font-medium">{item.value}</p>
                   </div>
                 </div>
               ))}
@@ -83,10 +83,10 @@ export default function ContactSection() {
           </div>
 
           {/* Form side */}
-          <div ref={refForm} className="reveal bg-white rounded-3xl p-8 shadow-lg">
+          <div ref={refForm} className="reveal bg-white dark:bg-[#0f2a20] rounded-3xl p-8 shadow-lg border border-transparent dark:border-white/10">
             <form onSubmit={handleSubmit} noValidate>
               <div className="mb-5">
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
                   {t.contact.labelName}
                 </label>
                 <input
@@ -95,12 +95,12 @@ export default function ContactSection() {
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   placeholder={t.contact.placeholderName}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/15 transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-white/15 bg-white dark:bg-[#133226] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-green-500 dark:focus:border-amber-300 focus:ring-2 focus:ring-green-500/15 dark:focus:ring-amber-300/20 transition-all"
                 />
               </div>
 
               <div className="mb-5">
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
                   {t.contact.labelPhone}
                 </label>
                 <input
@@ -108,12 +108,12 @@ export default function ContactSection() {
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
                   placeholder={t.contact.placeholderPhone}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/15 transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-white/15 bg-white dark:bg-[#133226] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-green-500 dark:focus:border-amber-300 focus:ring-2 focus:ring-green-500/15 dark:focus:ring-amber-300/20 transition-all"
                 />
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
                   {t.contact.labelMessage}
                 </label>
                 <textarea
@@ -122,20 +122,20 @@ export default function ContactSection() {
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   placeholder={t.contact.placeholderMessage}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/15 transition-all resize-y"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-white/15 bg-white dark:bg-[#133226] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-green-500 dark:focus:border-amber-300 focus:ring-2 focus:ring-green-500/15 dark:focus:ring-amber-300/20 transition-all resize-y"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-green-700 hover:bg-green-800 disabled:opacity-60 text-white font-bold py-3.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="w-full bg-green-700 dark:bg-amber-400 hover:bg-green-800 dark:hover:bg-amber-300 disabled:opacity-60 text-white dark:text-green-950 font-bold py-3.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 {loading ? "..." : t.contact.submit}
               </button>
 
               {success && (
-                <div className="mt-4 p-4 bg-green-100 text-green-800 rounded-xl text-sm font-medium">
+                <div className="mt-4 p-4 bg-green-100 dark:bg-emerald-900/40 text-green-800 dark:text-emerald-200 rounded-xl text-sm font-medium">
                   {t.contact.successMsg}
                 </div>
               )}

@@ -10,36 +10,36 @@ export default function AboutSection() {
   const refFeatures = useScrollReveal();
 
   return (
-    <section id="about" className="py-24 bg-white">
+    <section id="about" className="py-24 bg-white dark:bg-[#06160f]">
       <div className="max-w-6xl mx-auto px-6">
         {/* Main grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
           {/* Left — text */}
           <div ref={refLeft} className="reveal">
-            <span className="inline-block bg-green-100 text-green-700 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+            <span className="inline-block bg-green-100 dark:bg-white/10 text-green-700 dark:text-amber-300 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
               {t.about.badge}
             </span>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-green-950 mb-6">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-green-950 dark:text-white mb-6">
               {t.about.title}
             </h2>
-            <p className="text-gray-600 text-lg leading-relaxed mb-8">
+            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-8">
               {t.about.story}
             </p>
 
             <div className="flex flex-col gap-4">
-              <div className="bg-green-50 border-l-4 border-green-500 rounded-r-xl px-5 py-4">
-                <h4 className="font-serif font-bold text-green-900 mb-1">
+              <div className="bg-green-50 dark:bg-[#0f2a20] border-l-4 border-green-500 dark:border-amber-400 rounded-r-xl px-5 py-4">
+                <h4 className="font-serif font-bold text-green-900 dark:text-amber-300 mb-1">
                   {t.about.missionTitle}
                 </h4>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                   {t.about.missionText}
                 </p>
               </div>
-              <div className="bg-green-50 border-l-4 border-green-500 rounded-r-xl px-5 py-4">
-                <h4 className="font-serif font-bold text-green-900 mb-1">
+              <div className="bg-green-50 dark:bg-[#0f2a20] border-l-4 border-green-500 dark:border-amber-400 rounded-r-xl px-5 py-4">
+                <h4 className="font-serif font-bold text-green-900 dark:text-amber-300 mb-1">
                   {t.about.visionTitle}
                 </h4>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                   {t.about.visionText}
                 </p>
               </div>
@@ -74,11 +74,11 @@ export default function AboutSection() {
           {t.about.features.map((f, i) => (
             <div
               key={i}
-              className="bg-green-50 border border-green-100 rounded-2xl p-6 text-center hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+              className="bg-green-50 dark:bg-[#0f2a20] border border-green-100 dark:border-white/10 rounded-2xl p-6 text-center hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
             >
               <span className="text-4xl block mb-4">{f.icon}</span>
-              <h4 className="font-serif font-bold text-green-900 mb-2">{f.title}</h4>
-              <p className="text-gray-500 text-sm leading-relaxed">{f.text}</p>
+              <h4 className="font-serif font-bold text-green-900 dark:text-amber-300 mb-2">{f.title}</h4>
+              <p className="text-gray-500 dark:text-gray-300 text-sm leading-relaxed">{f.text}</p>
             </div>
           ))}
         </div>

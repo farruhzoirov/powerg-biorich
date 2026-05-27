@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Manual light/dark toggle — .dark class on <html>, not OS preference */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
@@ -36,6 +39,24 @@ body {
   overflow-x: hidden;
 }
 
+html.dark body {
+  background: #05140f;
+  color: #e5e7eb;
+}
+
+/* Smooth theme transition */
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition:
+    background-color 380ms ease,
+    border-color 380ms ease,
+    color 280ms ease,
+    fill 280ms ease,
+    stroke 280ms ease,
+    box-shadow 380ms ease !important;
+}
+
 /* Scroll reveal animation */
 .reveal {
   opacity: 0;
@@ -57,10 +78,12 @@ body {
 
 /* Header responsive nav */
 .header-nav { display: none; }
+.header-lang { display: none; }
 .header-burger { display: flex; }
 
 @media (min-width: 1024px) {
   .header-nav { display: flex; }
+  .header-lang { display: flex; }
   .header-burger { display: none; }
 }
 

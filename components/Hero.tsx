@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useLang } from "@/context/LangContext";
 
 export default function Hero() {
@@ -12,26 +11,16 @@ export default function Hero() {
       className="relative w-full flex items-center overflow-hidden"
       style={{ height: "100svh", minHeight: 600, maxHeight: 900 }}
     >
-      {/* Background gradient */}
+      {/* Background — hero.jpg qo'shilsa: public/images/hero.jpg (1920×900) */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-950 via-green-800 to-green-600 z-0" />
-
-      {/*
-        Hero image — replace /images/hero.jpg with your own photo.
-        Recommended: 1920 × 900 px (landscape JPG/WebP).
-        The image fills the full section height.
-      */}
-      <Image
-        src="/images/hero.jpg"
-        alt="PowerG Biorich hero"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center z-10 opacity-35"
-        onError={() => {}}
+      <div
+        className="absolute inset-0 z-10 opacity-40"
+        style={{
+          backgroundImage:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,201,122,0.25) 0%, transparent 60%)",
+        }}
       />
-
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-green-950/60 to-green-900/75 z-20" />
+      <div className="absolute inset-0 bg-gradient-to-b from-green-950/50 to-green-900/70 z-20" />
 
       {/* Content */}
       <div className="relative z-30 w-full max-w-3xl mx-auto px-6 text-center text-white">

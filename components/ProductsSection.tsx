@@ -11,17 +11,17 @@ export default function ProductsSection() {
   const ref = useScrollReveal();
 
   return (
-    <section id="products" className="py-24 bg-green-50">
+    <section id="products" className="py-24 bg-green-50 dark:bg-[#071b14]">
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <div ref={ref} className="reveal text-center mb-16">
-          <span className="inline-block bg-green-100 text-green-700 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+          <span className="inline-block bg-green-100 dark:bg-white/10 text-green-700 dark:text-amber-300 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
             {t.products.badge}
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl font-bold text-green-950 mb-4">
+          <h2 className="font-serif text-4xl md:text-5xl font-bold text-green-950 dark:text-white mb-4">
             {t.products.title}
           </h2>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-gray-500 dark:text-gray-300 text-lg max-w-xl mx-auto leading-relaxed">
             {t.products.subtitle}
           </p>
         </div>
@@ -32,7 +32,7 @@ export default function ProductsSection() {
             <Link
               key={product.id}
               href={`/products/${product.id}`}
-              className="group bg-white rounded-3xl overflow-hidden shadow-sm border border-black/4 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300"
+              className="group bg-white dark:bg-[#0f2a20] rounded-3xl overflow-hidden shadow-sm border border-black/4 dark:border-white/10 hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300"
               style={{ animationDelay: `${i * 60}ms` }}
             >
               {/* Image */}
@@ -47,8 +47,8 @@ export default function ProductsSection() {
                   />
                 )}
                 {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-green-800/55 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                  <span className="bg-white text-green-800 text-sm font-bold px-5 py-2 rounded-full">
+                <div className="absolute inset-0 bg-gradient-to-t from-green-800/55 dark:from-black/55 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                  <span className="bg-white dark:bg-[#163a2c] text-green-800 dark:text-amber-300 text-sm font-bold px-5 py-2 rounded-full">
                     {t.products.viewDetails}
                   </span>
                 </div>
@@ -56,10 +56,10 @@ export default function ProductsSection() {
 
               {/* Info */}
               <div className="p-5">
-                <h3 className="font-serif text-xl font-bold text-green-950 mb-2">
+                <h3 className="font-serif text-xl font-bold text-green-950 dark:text-white mb-2">
                   {product.name[locale]}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">
+                <p className="text-gray-500 dark:text-gray-300 text-sm leading-relaxed line-clamp-2">
                   {product.shortDesc[locale]}
                 </p>
               </div>
