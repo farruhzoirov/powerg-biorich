@@ -73,7 +73,7 @@ export const translations = {
     footer: {
       tagline: "Sog'liq va farovonlik uchun tabiiy mahsulotlar",
       quickLinks: "Tezkor havolalar",
-      rights: "© 2025 PowerG Biorich. Barcha huquqlar himoyalangan.",
+      rights: "© 2026 PowerG Biorich. Barcha huquqlar himoyalangan.",
     },
   },
 
