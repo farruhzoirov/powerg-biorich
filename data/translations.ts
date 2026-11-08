@@ -73,7 +73,7 @@ export const translations = {
     footer: {
       tagline: "Sog'liq va farovonlik uchun tabiiy mahsulotlar",
       quickLinks: "Tezkor havolalar",
-      rights: "© 2026 PowerG Biorich. Barcha huquqlar himoyalangan.",
+      rights: "© 2026 Power-G Bio Rich. Barcha huquqlar himoyalangan.",
     },
   },
 
@@ -149,7 +149,7 @@ export const translations = {
     footer: {
       tagline: "Натуральные продукты для здоровья и благополучия",
       quickLinks: "Быстрые ссылки",
-      rights: "© 2025 PowerG Biorich. Все права защищены.",
+      rights: "© 2026 Power-G Bio Rich. Все права защищены.",
     },
   },
 
@@ -225,7 +225,7 @@ export const translations = {
     footer: {
       tagline: "Natural products for health and wellness",
       quickLinks: "Quick Links",
-      rights: "© 2025 PowerG Biorich. All rights reserved.",
+      rights: "© 2026 Power-G Bio Rich. All rights reserved.",
     },
   },
 } as const;

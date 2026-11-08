@@ -2,138 +2,112 @@
 
 import Image from "next/image";
 import { useLang } from "@/context/LangContext";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { content } from "@/data/content";
+import Reveal from "@/components/ui/Reveal";
+import CountUp from "@/components/ui/CountUp";
+import { IconCheck, IconLeaf } from "@/components/ui/Icons";
 
 export default function AboutSection() {
-  const { t } = useLang();
-  const refLeft = useScrollReveal();
-  const refRight = useScrollReveal();
-  const refBrand = useScrollReveal();
-  const refFeatures = useScrollReveal();
+  const { locale } = useLang();
+  const c = content[locale];
+  const a = c.about;
 
   return (
-    <section id="about" className="py-24 bg-white dark:bg-[#06160f]">
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Main grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
-          {/* Left — text */}
-          <div ref={refLeft} className="reveal">
-            <span className="inline-block bg-green-100 dark:bg-white/10 text-green-700 dark:text-amber-300 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
-              {t.about.badge}
+    <section id="about" className="relative overflow-hidden bg-bg-alt py-12 sm:py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mx-auto max-w-3xl text-center">
+          <Reveal>
+            <span className="inline-block rounded-full bg-navy px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white dark:bg-brand/20 dark:text-brand">
+              {a.badge}
             </span>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-green-950 dark:text-white mb-6">
-              {t.about.title}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-8">
-              {t.about.story}
-            </p>
+          </Reveal>
+          <Reveal delay={100}>
+            <h2 className="mt-5 font-display text-3xl font-bold leading-tight text-heading sm:text-4xl lg:text-[2.8rem]">{a.title}</h2>
+          </Reveal>
+        </div>
 
-            <div className="flex flex-col gap-4">
-              <div className="bg-green-50 dark:bg-[#0f2a20] border-l-4 border-green-500 dark:border-amber-400 rounded-r-xl px-5 py-4">
-                <h4 className="font-serif font-bold text-green-900 dark:text-amber-300 mb-1">
-                  {t.about.missionTitle}
-                </h4>
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                  {t.about.missionText}
-                </p>
-              </div>
-              <div className="bg-green-50 dark:bg-[#0f2a20] border-l-4 border-green-500 dark:border-amber-400 rounded-r-xl px-5 py-4">
-                <h4 className="font-serif font-bold text-green-900 dark:text-amber-300 mb-1">
-                  {t.about.visionTitle}
-                </h4>
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                  {t.about.visionText}
-                </p>
-              </div>
+        {/* Founders */}
+        <div className="mt-14 grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <Reveal variant="left" className="relative mx-auto w-full max-w-md">
+            <div className="absolute -inset-4 rounded-[3rem] bg-gradient-to-br from-brand/40 via-transparent to-[#2a6bff]/30 blur-2xl" />
+            <div className="relative aspect-[1134/1343] overflow-hidden rounded-t-[999px] rounded-b-[2rem] border-4 border-white shadow-pop dark:border-white/10">
+              <Image src="/images/brand/founders.jpg" alt={a.names.join(", ")} fill sizes="(max-width: 1024px) 90vw, 440px" className="object-cover transition-transform duration-[1200ms] hover:scale-105" />
             </div>
-          </div>
+            <div className="animate-float absolute -right-3 bottom-8 rounded-2xl bg-navy px-5 py-3 text-white shadow-pop sm:-right-8">
+              <p className="font-display text-3xl font-bold text-brand">18+</p>
+              <p className="text-xs font-semibold text-white/80">{c.hero.floatB.label}</p>
+            </div>
+          </Reveal>
 
-          {/* Right — stats card */}
-          <div
-            ref={refRight}
-            className="reveal bg-gradient-to-br from-green-800 to-green-600 rounded-3xl p-10"
-          >
-            <div className="grid grid-cols-2 gap-8">
-              {t.about.stats.map((s, i) => (
-                <div key={i} className="text-center">
-                  <span className="block font-serif text-4xl font-bold text-amber-300 mb-1 leading-none">
-                    {s.value}
-                  </span>
-                  <span className="text-white/70 text-sm font-medium">
-                    {s.label}
-                  </span>
-                </div>
+          <div>
+            <Reveal>
+              <p className="text-sm font-bold uppercase tracking-widest text-brand-600 dark:text-brand">{a.founders}</p>
+            </Reveal>
+            <Reveal delay={100}>
+              <h3 className="mt-3 font-display text-2xl font-bold leading-snug text-heading sm:text-3xl">
+                {a.names[0]}
+                <span className="mx-2 text-brand">&</span>
+                {a.names[1]}
+              </h3>
+            </Reveal>
+
+            <ul className="mt-7 grid gap-3 sm:grid-cols-2">
+              {a.achievements.map((t, i) => (
+                <Reveal as="li" key={t} delay={150 + i * 70} variant="up">
+                  <div className="flex h-full items-start gap-3 rounded-2xl border border-line bg-surface p-4 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand/50">
+                    <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand text-[#04210f]">
+                      <IconCheck className="h-3.5 w-3.5" />
+                    </span>
+                    <span className="text-sm font-semibold leading-snug text-heading">{t}</span>
+                  </div>
+                </Reveal>
               ))}
-            </div>
+            </ul>
+
+            <Reveal delay={600} className="relative mt-8 overflow-hidden rounded-3xl bg-navy p-7 text-white shadow-pop">
+              <IconLeaf className="absolute -bottom-8 -right-4 h-36 w-36 text-white/10" />
+              <span className="font-display text-5xl leading-none text-brand">“</span>
+              <p className="-mt-3 text-xs font-bold uppercase tracking-widest text-brand">{a.missionLabel}</p>
+              <p className="relative mt-2 text-lg font-semibold leading-snug sm:text-xl">{a.mission}</p>
+            </Reveal>
           </div>
         </div>
 
-        {/* Brand image block */}
-        <div
-          ref={refBrand}
-          className="reveal relative mb-12 rounded-3xl overflow-hidden border border-green-100 dark:border-white/10"
-        >
-          <div className="relative w-full h-[230px] md:h-[280px]">
-            <Image
-              src="/images/products/cafe-7/image-1.jpg"
-              alt="Power-G Biorich premium mahsulotlari"
-              fill
-              sizes="100vw"
-              className="object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-green-950/70 via-green-900/35 to-transparent" />
-            <div className="absolute inset-0 flex items-end md:items-center p-6 md:p-10">
-              <p className="text-white text-lg md:text-2xl font-serif font-bold max-w-lg leading-snug">
-                Power-G Biorich — sifatli, ishonchli va zamonaviy tabiiy mahsulotlar
-              </p>
-            </div>
-          </div>
+        {/* Factory + lab */}
+        <div className="mt-20 grid gap-5 lg:grid-cols-2">
+          <Reveal variant="left">
+            <figure className="group relative aspect-[4/3] overflow-hidden sm:aspect-[16/10] rounded-[2rem] border border-line shadow-card">
+              <Image src="/images/brand/factory.jpg" alt={a.factoryTitle} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/95 via-navy-deep/55 to-navy-deep/10" />
+              <figcaption className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
+                <h4 className="font-display text-xl font-bold sm:text-2xl">{a.factoryTitle}</h4>
+                <p className="mt-2 max-w-md text-sm text-white/80">{a.factoryText}</p>
+              </figcaption>
+            </figure>
+          </Reveal>
+          <Reveal variant="right" delay={120}>
+            <figure className="group relative aspect-[4/3] overflow-hidden sm:aspect-[16/10] rounded-[2rem] border border-line shadow-card">
+              <Image src="/images/brand/lab.jpg" alt={a.labTitle} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/95 via-navy-deep/55 to-navy-deep/10" />
+              <figcaption className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
+                <h4 className="font-display text-xl font-bold sm:text-2xl">{a.labTitle}</h4>
+                <p className="mt-2 max-w-md text-sm text-white/80">{a.labText}</p>
+              </figcaption>
+            </figure>
+          </Reveal>
         </div>
 
-        {/* Feature cards */}
-        <div
-          ref={refFeatures}
-          className="reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
-        >
-          {t.about.features.map((f, i) => (
-            <div
-              key={i}
-              className="bg-green-50 dark:bg-[#0f2a20] border border-green-100 dark:border-white/10 rounded-2xl p-6 text-center hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
-            >
-              <span className="block mb-4 text-green-700 dark:text-amber-300">
-                {i === 0 && (
-                  <svg className="w-10 h-10 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                    <path d="M12 22c5-3 8-6.8 8-11V5l-8-3-8 3v6c0 4.2 3 8 8 11z" />
-                    <path d="M9 12l2 2 4-4" />
-                  </svg>
-                )}
-                {i === 1 && (
-                  <svg className="w-10 h-10 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                    <path d="M3 12h18" />
-                    <path d="M5 12a7 7 0 0 1 14 0" />
-                    <path d="M7 12a5 5 0 0 1 10 0" />
-                    <path d="M12 12v7" />
-                    <path d="M9.5 19H14.5" />
-                  </svg>
-                )}
-                {i === 2 && (
-                  <svg className="w-10 h-10 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                    <path d="M8 21h8" />
-                    <path d="M12 17v4" />
-                    <path d="M6 4h12v3a6 6 0 0 1-12 0V4z" />
-                    <path d="M6 6H4a2 2 0 0 0 2 2" />
-                    <path d="M18 6h2a2 2 0 0 1-2 2" />
-                  </svg>
-                )}
-                {i === 3 && (
-                  <svg className="w-10 h-10 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                    <path d="M20.8 8.6c0 5.3-8.8 10.4-8.8 10.4S3.2 13.9 3.2 8.6a4.8 4.8 0 0 1 8.4-3.2 4.8 4.8 0 0 1 8.4 3.2z" />
-                  </svg>
-                )}
-              </span>
-              <h4 className="font-serif font-bold text-green-900 dark:text-amber-300 mb-2">{f.title}</h4>
-              <p className="text-gray-500 dark:text-gray-300 text-sm leading-relaxed">{f.text}</p>
-            </div>
+        {/* Stats */}
+        <div className="mt-16 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {c.stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 100} variant="zoom">
+              <div className="rounded-3xl border border-line bg-surface p-6 text-center shadow-card transition-transform duration-300 hover:-translate-y-1.5">
+                <p className="text-gradient font-display text-4xl font-bold sm:text-5xl">
+                  <CountUp to={s.value} suffix={s.suffix} />
+                </p>
+                <p className="mt-2 text-sm font-semibold text-muted">{s.label}</p>
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>

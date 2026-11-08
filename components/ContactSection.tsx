@@ -2,17 +2,16 @@
 
 import { useState } from "react";
 import { useLang } from "@/context/LangContext";
-import { useScrollReveal } from "@/hooks/useScrollReveal";
+import Reveal from "@/components/ui/Reveal";
+import { IconCheck, IconClock, IconMail, IconPhone, IconPin } from "@/components/ui/Icons";
 
 export default function ContactSection() {
   const { t } = useLang();
-  const refInfo = useScrollReveal();
-  const refForm = useScrollReveal();
-
   const [form, setForm] = useState({ name: "", phone: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // NOTE: demo submit — no backend yet.
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -24,124 +23,94 @@ export default function ContactSection() {
     }, 800);
   }
 
-  const infoItems = [
-    {
-      icon: "📞",
-      label: t.contact.infoPhone,
-      // Replace with your real phone number
-      value: "+998 XX XXX XX XX",
-    },
-    {
-      icon: "✉️",
-      label: t.contact.infoEmail,
-      // Replace with your real email
-      value: "info@powerg-biorich.uz",
-    },
-    {
-      icon: "📍",
-      label: t.contact.infoLocation,
-      value: t.contact.locationValue,
-    },
-    {
-      icon: "🕐",
-      label: t.contact.infoHours,
-      value: t.contact.hoursValue,
-    },
+  const info = [
+    { Icon: IconPhone, label: t.contact.infoPhone, value: "+998 XX XXX XX XX" }, // TODO real phone
+    { Icon: IconMail, label: t.contact.infoEmail, value: "info@powerg-biorich.uz" }, // TODO real email
+    { Icon: IconPin, label: t.contact.infoLocation, value: t.contact.locationValue },
+    { Icon: IconClock, label: t.contact.infoHours, value: t.contact.hoursValue },
   ];
 
+  const field =
+    "peer w-full rounded-2xl border border-line bg-surface-2 px-4 pb-2.5 pt-6 text-[15px] font-medium text-ink outline-none transition-all placeholder-transparent focus:border-brand focus:bg-surface focus:ring-4 focus:ring-brand/15";
+  const lbl =
+    "pointer-events-none absolute left-4 top-4 origin-left text-sm font-semibold text-muted transition-all peer-focus:top-2 peer-focus:scale-[0.8] peer-focus:text-brand-600 peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:scale-[0.8]";
+
   return (
-    <section id="contact" className="py-24 bg-green-50 dark:bg-[#071b14]">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
-          {/* Info side */}
-          <div ref={refInfo} className="reveal pt-2">
-            <span className="inline-block bg-green-100 dark:bg-white/10 text-green-700 dark:text-amber-300 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+    <section id="contact" className="relative overflow-hidden bg-bg-alt py-12 sm:py-20 lg:py-28">
+      <div className="animate-blob absolute -left-24 bottom-0 h-80 w-80 bg-brand/15 blur-3xl" />
+      <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+        <div>
+          <Reveal>
+            <span className="inline-block rounded-full bg-brand/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-600 dark:text-brand">
               {t.contact.badge}
             </span>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-green-950 dark:text-white mb-3">
-              {t.contact.title}
-            </h2>
-            <p className="text-gray-500 dark:text-gray-300 text-lg leading-relaxed mb-10">
-              {t.contact.subtitle}
-            </p>
+          </Reveal>
+          <Reveal delay={100}>
+            <h2 className="mt-5 font-display text-3xl font-bold leading-tight text-heading sm:text-4xl">{t.contact.title}</h2>
+          </Reveal>
+          <Reveal delay={200}>
+            <p className="mt-4 text-lg text-muted">{t.contact.subtitle}</p>
+          </Reveal>
 
-            <div className="flex flex-col gap-5">
-              {infoItems.map((item, i) => (
-                <div key={i} className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 dark:bg-white/10 rounded-xl flex items-center justify-center text-xl shrink-0">
-                    {item.icon}
-                  </div>
+          <ul className="mt-8 grid gap-3">
+            {info.map(({ Icon, label, value }, i) => (
+              <Reveal as="li" key={label} delay={250 + i * 80} variant="left">
+                <div className="group flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand/50">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand/15 text-brand-600 transition-all duration-300 group-hover:bg-brand group-hover:text-[#04210f] dark:text-brand">
+                    <Icon className="h-6 w-6" />
+                  </span>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-green-600 dark:text-amber-300 mb-0.5">
-                      {item.label}
-                    </p>
-                    <p className="text-gray-700 dark:text-gray-200 font-medium">{item.value}</p>
+                    <p className="text-xs font-bold uppercase tracking-wider text-muted">{label}</p>
+                    <p className="font-semibold text-heading">{value}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
 
-          {/* Form side */}
-          <div ref={refForm} className="reveal bg-white dark:bg-[#0f2a20] rounded-3xl p-8 shadow-lg border border-transparent dark:border-white/10">
-            <form onSubmit={handleSubmit} noValidate>
-              <div className="mb-5">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
-                  {t.contact.labelName}
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder={t.contact.placeholderName}
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-white/15 bg-white dark:bg-[#133226] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-green-500 dark:focus:border-amber-300 focus:ring-2 focus:ring-green-500/15 dark:focus:ring-amber-300/20 transition-all"
-                />
+        <Reveal variant="right" delay={150}>
+          <form onSubmit={handleSubmit} className="rounded-[2rem] border border-line bg-surface p-6 shadow-pop sm:p-9">
+            <div className="grid gap-4">
+              <div className="relative">
+                <input id="c-name" required placeholder=" " value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={field} />
+                <label htmlFor="c-name" className={lbl}>{t.contact.labelName}</label>
               </div>
-
-              <div className="mb-5">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
-                  {t.contact.labelPhone}
-                </label>
-                <input
-                  type="tel"
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  placeholder={t.contact.placeholderPhone}
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-white/15 bg-white dark:bg-[#133226] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-green-500 dark:focus:border-amber-300 focus:ring-2 focus:ring-green-500/15 dark:focus:ring-amber-300/20 transition-all"
-                />
+              <div className="relative">
+                <input id="c-phone" required type="tel" placeholder=" " value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={field} />
+                <label htmlFor="c-phone" className={lbl}>{t.contact.labelPhone}</label>
               </div>
-
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
-                  {t.contact.labelMessage}
-                </label>
-                <textarea
-                  required
-                  rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  placeholder={t.contact.placeholderMessage}
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-white/15 bg-white dark:bg-[#133226] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-green-500 dark:focus:border-amber-300 focus:ring-2 focus:ring-green-500/15 dark:focus:ring-amber-300/20 transition-all resize-y"
-                />
+              <div className="relative">
+                <textarea id="c-msg" rows={4} placeholder=" " value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className={`${field} resize-none`} />
+                <label htmlFor="c-msg" className={lbl}>{t.contact.labelMessage}</label>
               </div>
-
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-green-700 dark:bg-amber-400 hover:bg-green-800 dark:hover:bg-amber-300 disabled:opacity-60 text-white dark:text-green-950 font-bold py-3.5 rounded-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="btn-shine mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-brand px-8 py-4 text-base font-bold text-[#04210f] shadow-[0_14px_34px_-10px_var(--brand)] transition-all hover:-translate-y-1 hover:bg-brand-600 disabled:opacity-70"
               >
-                {loading ? "..." : t.contact.submit}
+                {loading ? (
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#04210f]/30 border-t-[#04210f]" />
+                ) : (
+                  t.contact.submit
+                )}
               </button>
-
-              {success && (
-                <div className="mt-4 p-4 bg-green-100 dark:bg-emerald-900/40 text-green-800 dark:text-emerald-200 rounded-xl text-sm font-medium">
-                  {t.contact.successMsg}
+              <div
+                className={`grid transition-all duration-500 ${success ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+                aria-live="polite"
+              >
+                <div className="overflow-hidden">
+                  <p className="flex items-center gap-3 rounded-2xl bg-brand/15 p-4 text-sm font-semibold text-heading">
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brand text-[#04210f]">
+                      <IconCheck className="h-4 w-4" />
+                    </span>
+                    {t.contact.successMsg}
+                  </p>
                 </div>
-              )}
-            </form>
-          </div>
-        </div>
+              </div>
+            </div>
+          </form>
+        </Reveal>
       </div>
     </section>
   );

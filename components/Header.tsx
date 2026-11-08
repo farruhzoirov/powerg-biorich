@@ -1,283 +1,221 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Logo from "@/components/ui/Logo";
 import { usePathname } from "next/navigation";
 import { useLang } from "@/context/LangContext";
 import { useTheme } from "@/context/ThemeContext";
-import { Locale } from "@/data/translations";
+import { content } from "@/data/content";
+import type { Locale } from "@/data/translations";
+import { IconArrow, IconClose, IconMenu, IconMoon, IconSun } from "@/components/ui/Icons";
 
-function IconSun({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-    </svg>
-  );
-}
-
-function IconMoon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3a6.5 6.5 0 1 0 11.5 11.5z" />
-    </svg>
-  );
-}
-
-function ThemeToggleButton({
-  theme,
-  onClick,
-  className,
-}: {
-  theme: "light" | "dark";
-  onClick: () => void;
-  className: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={theme === "dark" ? "Light mode" : "Dark mode"}
-      className={className}
-    >
-      {theme === "dark" ? (
-        <IconSun className="w-[18px] h-[18px]" />
-      ) : (
-        <IconMoon className="w-[18px] h-[18px]" />
-      )}
-    </button>
-  );
-}
+const LOCALES: Locale[] = ["uz", "ru", "en"];
 
 export default function Header() {
-  const { t, locale, setLocale } = useLang();
+  const { locale, setLocale } = useLang();
   const { theme, toggleTheme } = useTheme();
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const c = content[locale];
 
-  const isHome = pathname === "/";
-  const solid = !isHome || scrolled;
-  const menuSolid = solid || menuOpen;
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("home");
+
+  const links = [
+    { id: "home", label: c.nav.home },
+    { id: "products", label: c.nav.products },
+    { id: "about", label: c.nav.about },
+    { id: "certs", label: c.nav.certs },
+    { id: "contact", label: c.nav.contact },
+  ];
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const bar = document.getElementById("scroll-progress");
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 12);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      bar?.style.setProperty("--p", String(max > 0 ? Math.min(y / max, 1) : 0));
+    };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Scroll-spy (home page only)
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    if (pathname !== "/") return;
+    const ids = ["home", "why", "categories", "products", "ginger", "about", "certs", "contact"];
+    const els = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => e.isIntersecting && setActive(e.target.id));
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [menuOpen]);
+  }, [open]);
 
-  const navLinks = [
-    { label: t.nav.home, href: "/#home" },
-    { label: t.nav.products, href: "/#products" },
-    { label: t.nav.about, href: "/#about" },
-    { label: t.nav.contact, href: "/#contact" },
-  ];
-
-  const langs: Locale[] = ["uz", "ru", "en"];
-
-  const langButtonClass = (active: boolean) =>
-    `text-xs font-bold px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer ${
-      active
-        ? menuSolid
-          ? "bg-green-700 text-white dark:bg-amber-400 dark:text-green-950"
-          : "bg-white text-green-700"
-        : menuSolid
-          ? "text-gray-500 dark:text-gray-300 hover:text-green-700 dark:hover:text-white"
-          : "text-white/70 hover:text-white"
-    }`;
-
-  const themeButtonClass = menuSolid
-    ? "h-9 w-9 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-amber-300 hover:bg-gray-200 dark:hover:bg-white/15"
-    : "h-9 w-9 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer bg-white/15 text-white hover:bg-white/25";
+  const href = (id: string) => (id === "home" ? "/" : `/#${id}`);
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          menuOpen
-            ? "bg-transparent py-3"
-            : menuSolid
-              ? "bg-white/95 dark:bg-green-950/90 backdrop-blur-xl shadow-sm py-3 border-b border-gray-100 dark:border-green-900/80"
-              : "py-4"
+        className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-500 ${
+          scrolled || pathname !== "/"
+            ? "border-line bg-[var(--glass)] shadow-card backdrop-blur-xl"
+            : "border-transparent bg-transparent"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-6">
-          <div className="shrink-0">
-            {!menuOpen && (
-              <Link href="/#home" onClick={() => setMenuOpen(false)}>
-                <Image
-                  src="/images/logo.png"
-                  alt="PowerG Biorich"
-                  width={280}
-                  height={140}
-                  priority
-                  className={`h-16 md:h-[4.5rem] w-auto transition-all duration-300 ${
-                    menuSolid ? "brightness-0 dark:invert" : "brightness-0 invert"
-                  }`}
-                />
-              </Link>
-            )}
-          </div>
+        <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-2 px-3 sm:h-[76px] sm:gap-4 sm:px-6">
+          {/* Logo */}
+          <Link href="/" aria-label="Power-G Bio Rich" className="flex shrink-0 items-center">
+            <Logo className="h-14 w-auto sm:h-16" priority />
+          </Link>
 
-          <nav className="header-nav items-center gap-8 flex-1 justify-center">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`text-sm font-semibold relative group transition-colors duration-200 ${
-                  menuSolid
-                    ? "text-gray-600 dark:text-gray-200 hover:text-green-700 dark:hover:text-amber-300"
-                    : "text-white/90 hover:text-white"
-                }`}
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-600 rounded group-hover:w-full transition-all duration-300" />
-              </a>
-            ))}
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-1 lg:flex">
+            {links.map((l) => {
+              const isActive = pathname === "/" ? active === l.id : l.id === "products" && pathname.startsWith("/products");
+              return (
+                <Link
+                  key={l.id}
+                  href={href(l.id)}
+                  className={`relative inline-flex h-10 items-center rounded-full px-4 text-[15px] font-semibold transition-colors ${
+                    isActive ? "bg-brand/15 text-heading ring-1 ring-brand/30" : "text-muted hover:text-heading"
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            {menuOpen && (
-              <div className="lg:hidden flex items-center gap-2">
-                <div className="flex items-center gap-1 rounded-full p-1 bg-white/10">
-                  {langs.map((l) => (
-                    <button
-                      key={l}
-                      type="button"
-                      onClick={() => setLocale(l)}
-                      className={`min-w-[2.5rem] text-xs font-bold px-2.5 py-1.5 rounded-full transition-all cursor-pointer ${
-                        locale === l
-                          ? "bg-amber-400 text-green-950"
-                          : "text-white/70 hover:text-white"
-                      }`}
-                    >
-                      {l.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
-                <ThemeToggleButton
-                  theme={theme}
-                  onClick={toggleTheme}
-                  className="h-10 w-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer bg-white/10 text-amber-300 hover:bg-white/15"
-                />
-              </div>
-            )}
-
-            <div
-              className={`header-lang items-center gap-0.5 rounded-full p-1 ${
-                menuSolid ? "bg-gray-100 dark:bg-white/10" : "bg-white/15"
-              }`}
-            >
-              {langs.map((l) => (
+          {/* Controls — all 40px tall */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="flex h-10 items-center rounded-full border border-line bg-surface/80 p-1">
+              {LOCALES.map((l) => (
                 <button
                   key={l}
                   type="button"
                   onClick={() => setLocale(l)}
-                  className={langButtonClass(locale === l)}
+                  className={`h-8 rounded-full px-2 text-[11px] font-bold uppercase transition-all sm:px-3 sm:text-xs ${
+                    locale === l ? "bg-navy text-white shadow-sm dark:bg-brand dark:text-[#04210f]" : "text-muted hover:text-heading"
+                  }`}
                 >
-                  {l.toUpperCase()}
+                  {l}
                 </button>
               ))}
             </div>
 
-            {/* Mobile menu ochiq bo'lsa headerda faqat X ko'rinsin */}
-            {!menuOpen && (
-              <ThemeToggleButton
-                theme={theme}
-                onClick={toggleTheme}
-                className={themeButtonClass}
-              />
-            )}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === "dark" ? "Light mode" : "Dark mode"}
+              className="grid h-10 w-10 place-items-center rounded-full border border-line bg-surface/80 text-heading transition-transform hover:scale-110 active:scale-95"
+            >
+              {theme === "dark" ? <IconSun className="h-[18px] w-[18px]" /> : <IconMoon className="h-[18px] w-[18px]" />}
+            </button>
 
-            <div className="header-burger">
-              <button
-                type="button"
-                onClick={() => setMenuOpen(!menuOpen)}
-                className="relative flex h-10 w-10 items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
-                aria-label={menuOpen ? "Close menu" : "Open menu"}
-                aria-expanded={menuOpen}
-              >
-                <span
-                  className={`absolute block h-0.5 w-5 rounded transition-all duration-300 ${
-                    menuOpen ? "bg-white" : menuSolid ? "bg-gray-800 dark:bg-gray-100" : "bg-white"
-                  } ${menuOpen ? "rotate-45" : "-translate-y-[5px]"}`}
-                />
-                <span
-                  className={`absolute block h-0.5 w-5 rounded transition-all duration-300 ${
-                    menuOpen ? "bg-white" : menuSolid ? "bg-gray-800 dark:bg-gray-100" : "bg-white"
-                  } ${menuOpen ? "-rotate-45" : "translate-y-[5px]"}`}
-                />
-              </button>
-            </div>
+            <Link
+              href="/#contact"
+              className="btn-shine group hidden h-10 items-center gap-1.5 rounded-full bg-brand px-5 text-[15px] font-bold text-[#04210f] shadow-[0_8px_24px_-8px_var(--brand)] transition-all hover:-translate-y-0.5 hover:bg-brand-600 md:inline-flex"
+            >
+              {c.nav.order}
+              <IconArrow className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label="Menu"
+              className="grid h-10 w-10 place-items-center rounded-full border border-line bg-surface/80 text-heading lg:hidden"
+            >
+              <IconMenu className="h-5 w-5" />
+            </button>
           </div>
+        </div>
+
+        {/* Scroll progress — runs along the bottom edge of the header */}
+        <div className="pointer-events-none absolute inset-x-0 -bottom-px h-[3px] overflow-hidden">
+          <div id="scroll-progress" className="scroll-progress h-full w-full bg-gradient-to-r from-brand to-[#2a6bff]" />
         </div>
       </header>
 
-      {/* Mobile menu — full screen, page ko'rinmaydi */}
+      {/* Mobile menu */}
       <div
-        className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-[60] lg:hidden transition-all duration-500 ${
+          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         }`}
-        aria-hidden={!menuOpen}
       >
-        <div className="absolute inset-0 bg-green-950 dark:bg-[#030d0a]" />
-
+        <div className="absolute inset-0 bg-navy-deep/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
         <div
-          className={`relative h-full w-full pt-20 pb-8 px-6 flex flex-col transition-transform duration-300 ease-out ${
-            menuOpen ? "translate-y-0" : "-translate-y-2"
+          className={`absolute inset-x-3 top-3 rounded-3xl border border-line bg-surface p-5 shadow-pop transition-transform duration-500 ${
+            open ? "translate-y-0" : "-translate-y-6"
           }`}
         >
-          <div className="flex justify-center pb-4">
-            <Image
-              src="/images/logo.png"
-              alt="PowerG Biorich"
-              width={270}
-              height={135}
-              className="h-20 w-auto brightness-0 invert"
-            />
+          <div className="mb-4 flex items-center justify-between">
+            <Logo className="h-11 w-auto" />
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close"
+              className="grid h-10 w-10 place-items-center rounded-full bg-surface-2 text-heading"
+            >
+              <IconClose className="h-5 w-5" />
+            </button>
           </div>
 
-          <nav className="flex-1 flex items-start pt-3">
-            <ul className="w-full flex flex-col gap-4 text-center">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="font-serif text-3xl font-bold text-white/95 hover:text-amber-300 transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+          <nav className="flex flex-col">
+            {links.map((l, i) => (
+              <Link
+                key={l.id}
+                href={href(l.id)}
+                onClick={() => setOpen(false)}
+                style={{ transitionDelay: open ? `${120 + i * 45}ms` : "0ms" }}
+                className={`flex items-center justify-between rounded-2xl px-4 py-3.5 text-lg font-bold text-heading transition-all duration-500 hover:bg-brand/10 ${
+                  open ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
+                }`}
+              >
+                {l.label}
+                <IconArrow className="h-5 w-5 text-brand" />
+              </Link>
+            ))}
           </nav>
+
+          <div className="mt-4 flex items-center justify-between gap-3 border-t border-line pt-4">
+            <div className="flex items-center rounded-full border border-line p-0.5">
+              {LOCALES.map((l) => (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => setLocale(l)}
+                  className={`rounded-full px-3 py-1.5 text-xs font-bold uppercase ${
+                    locale === l ? "bg-navy text-white dark:bg-brand dark:text-[#04210f]" : "text-muted"
+                  }`}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
+            <Link
+              href="/#contact"
+              onClick={() => setOpen(false)}
+              className="rounded-full bg-brand px-5 py-2.5 text-sm font-bold text-[#04210f]"
+            >
+              {c.nav.order}
+            </Link>
+          </div>
         </div>
       </div>
     </>
